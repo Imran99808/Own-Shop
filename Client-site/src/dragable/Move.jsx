@@ -73,19 +73,20 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display}) {
       
       // &&((client-sPosition<=0&&client-sPosition>=-((itemHeight*length)-itemHeight))||display)
         if(clicked){
+          
              e.preventDefault();
             client=display?e.nativeEvent.clientX:e.nativeEvent.clientY;
-            let fixedp=client-sPosition;
-            (position<=0&&fixedp>0)&&(fixedp=0)
+             let fixedp=client-sPosition;
+             (fixedp>0||fixedp<-(itemWidth*length-itemWidth*iShow))&&(fixedp=position2)
             setPosition(fixedp);
-          
+            // position<=0&&
           // (!circle||(position<=0&&((position>=-((itemHeight*length)-itemHeight)))))
         //  circle?((position<=0&&position>=-(itemWidth*children.length+2*iShow)-itemWidth*iShow)&&setSide(position-position2<-itemWidth/4||position-position2>itemWidth/4)):((position<=0&&position>=-itemWidth*children.length)&&setSide(position-position2<-itemWidth/4||position-position2>itemWidth/4))
 
 
         // this logic hel side touch decide work not work
         // console.log(position<=0&&position>=-(itemWidth*length-itemWidth*iShow))
-         (position<=0&&position>=-(itemWidth*length-itemWidth*iShow)&&display)&&(setSide(position-position2<-itemWidth/4||position-position2>itemWidth/4))
+         (setSide(position-position2<-itemWidth/4||position-position2>itemWidth/4))     //(position<=0&&position>=-(itemWidth*length-itemWidth*iShow)&&display)&&  
           // position>=0==false&& setSide(position-position2<-itemWidth/4||position-position2>itemWidth/4)
       //  console.log(position<=0&&position>=-(itemWidth*length-itemWidth*iShow))
          if(((position2-position<=-itemWidth||position2-position>=itemWidth)&&(position<=0&&position>=-(itemWidth*length-itemWidth*iShow)))&&iShow!==1){
