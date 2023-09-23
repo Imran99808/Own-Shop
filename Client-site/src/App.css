@@ -108,6 +108,12 @@ padding-left: 1rem;
 .text-lg{
   font-size: 1.125rem;
 }
+.text-lg-1{
+  font-size: 1.2rem;
+}
+.text-lg-2{
+  font-size: 1.4rem;
+}
 
 .outline-none{
   outline: 2px solid transparent; 

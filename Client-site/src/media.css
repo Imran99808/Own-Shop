@@ -41,19 +41,27 @@
      
 
 }
+
 .hero>.b-container{
  
     width: 69%;
-  
+   /* background-color: red; */
      
     
    
 
+}
+.hero>.s-tags>.categories{
+    /* border: 2px solid black; */
+     height: 340px;   
 }
 }
 @media (min-width:1200px){
     .container{
         max-width:1200px ;
     }
-}
+     .hero>.s-tags>.categories{
+        height: 391px;
+    }
+} 
 
