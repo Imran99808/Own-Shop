@@ -23,24 +23,8 @@ function Hero() {
         }
   return (
     <section className='hero flex gap-'>
-        <div className="b-container   ">
 
-            {/* <Move {...settings} >    */}
-            <li className="banner ">
-              
-            <img className='w-full' loading='lazy'   src={b1} alt="" />  
-           </li>
-           <li className="banner ">
-           <img className='w-full'   src={b1} alt="" />   
-           </li>
-           <li className="banner ">
-            <img className='w-full'   src={b1} alt="" /> 
-           </li> 
-
-
-
-            {/* </Move>        */}
-        </div>
+            
           <div className="s-tags f1">
            <Categories />
          </div> 
@@ -50,3 +34,37 @@ function Hero() {
 }
 
 export default Hero
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// {/* <div className="b-container   ">
+
+// {/* <Move {...settings} >    */}
+// <li className="banner ">
+  
+// <img className='w-full' loading='lazy'   src={b1} alt="" />  
+// </li>
+// <li className="banner ">
+// <img className='w-full'   src={b1} alt="" />   
+// </li>
+// <li className="banner ">
+// <img className='w-full'   src={b1} alt="" /> 
+// </li> 
+
+
+
+// {/* </Move>        */}
+// </div> */}
