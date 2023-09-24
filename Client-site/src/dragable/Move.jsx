@@ -23,10 +23,11 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
     const parentElement=useRef();
     // const parentElement2=useRef()
     const[first,setFirst]=useState()
-    const[innerWidth,setInner]=useState(window.innerWidth)
+    const[innerWidth,setInner]=useState(window.innerWidth);
+   
      const[itemWidth,setItem]=useState()
      const[itemHeight,setItemH]=useState()
-    
+     const[itemswidth,setItems]=useState()
     const[position,setPosition]=useState(0);
     const[width,setWidth]=useState(0);
     const[position2,setPosition2]=useState(0);
@@ -88,7 +89,7 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
             client=!e.touches?display?e.nativeEvent.clientX:e.nativeEvent.clientY:display?e.touches[0].clientX:e.touches[0].clientY;
             let fixedp=client-sPosition;
            
-             let lastP=display?itemWidth*length-rootW:itemHeight*length-rootH;
+             let lastP=display?itemswidth-rootW:itemHeight*length-rootH;
             (fixedp>0||fixedp<-(lastP))&&(fixedp=position2-fixedp<0?0:-(lastP));
             setPosition(fixedp);
             
@@ -148,17 +149,19 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
      
       
 
-    console.log(itemWidth)
+    console.log(display)
 
       useEffect(()=>{
         
       
         rootW=parentElement.current.offsetWidth;
         rootH=parentElement.current.offsetHeight;
-        media&& setItem(parseInt( parentElement.current.offsetWidth/iShow));
+        media&& setItem(parseInt( parentElement.current.offsetWidth/iShow)) ;
+        media&&setItems(( parentElement.current.offsetWidth/iShow)*length);
         setItemH(parseInt( parentElement.current.offsetHeight/iShow2));
          const handaleResize=()=>{
            media&&setItem(parseInt( parentElement.current.offsetWidth/iShow));
+           rootW=parentElement.current.offsetWidth;
            cb&&cb();
           
          }
@@ -167,7 +170,9 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
          return ()=>window.removeEventListener('resize',handaleResize)
      },[iShow,iShow2])
     
-console.log(itemHeight)
+
+
+     console.log(itemswidth)
    function box(value){
     const  div=element.current;
     let itemsWidth=0;
@@ -179,7 +184,7 @@ console.log(itemHeight)
     (circle&&i<parseInt(iShow))?count=children[(children.length-parseInt(iShow))+i]:circle?count=children[i-parseInt(iShow)]:count=children[i];
     (circle&&i>=children.length+parseInt(iShow))&&(count=children[i-(children.length+parseInt(iShow))]);
    
-      arr.push(<div key={i} id={i} className='c'  aria-hidden={itemWidth*i!=width&&"true"} style={{width:display?itemWidth===undefined?`${iWidth/iShow}%`:media?`${itemWidth}px`:'auto':'auto',height:!display?`${itemHeight}px`:'auto', whiteSpace:'nowrap'}}  >{count}</div>);
+      arr.push(<div key={i} id={i} className='c'  aria-hidden={itemWidth*i!=width&&"true"} style={{width:display?itemswidth===undefined?`${iWidth/iShow}%`:media?`${itemWidth}px`:'auto':'auto',height:!display?`${itemHeight}px`:'auto', whiteSpace:'nowrap'}}  >{count}</div>);
         i<children.length&& arr2.push( <li key={i}><button className='btn ' id={itemWidth==undefined?i:itemWidth*(i+1)} onClick={click} style={{opacity:(itemWidth*(i+1)==width)||((width==0&&i==children.length-iShow)||(width==itemWidth*(children.length+iShow)&&i==0))?'1':''}} ></button></li>)
       div&&( itemsWidth+=div.children[i].offsetWidth);
       
@@ -188,7 +193,7 @@ console.log(itemHeight)
   
   if(value=="card"){
      console.log(itemsWidth);
-     (!media&&!itemWidth&&div)&& setItem(itemsWidth/length);
+     (!media&&!itemswidth&&div)&& setItems(itemsWidth);
     return arr;
   }else{
    return arr2;
@@ -228,8 +233,8 @@ console.log(itemHeight)
       >
 
 
-      {/* width:display?itemWidth===undefined?`${(iWidth*length/iShow)}%`:`${(itemWidth*length)}px`:'', */}
-    <div className={`slider-container ${smoth&&'smoth'}`} style={{width:display?itemWidth===undefined?`${(iWidth*length/iShow)}%`:`${(itemWidth*length)}px`:'', transform: `${translate}(${ position}px)` ,display:display?'flex':'block'} } onTransitionEnd={()=>{
+      {/* width:display?itemWidth===undefined?`${(iWidth*length/iShow)}%`:`${(itemswidth}px`:'', */}
+    <div className={`slider-container ${smoth&&'smoth'}`} style={{width:display?itemswidth===undefined?`${(iWidth*length/iShow)}%`:`${(itemswidth)}px`:'', transform: `${translate}(${ position}px)` ,display:display?'flex':'block'} } onTransitionEnd={()=>{
        setSmoth(false) 
        btCount=0;
           if((position==0|| position==-itemWidth*(children.length+iShow))&&circle){
