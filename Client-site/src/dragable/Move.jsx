@@ -4,44 +4,53 @@ import './move.css'
 // {children,dots,iShow,circle}
 let btCount=0;
 
-let rootW=0;
-let rootH=0;
-let itemswidth=0;
+
+
+// let clicked=false;
+let smoth=false;
+let sPosition=0;
+ let i=false;
+
 function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb,media}) {
   
  
-  
+   
   let length;let client;let iShow2;let translate=display?'translate':'translateY';
+  
   iShow2=!display?iShow:1;
  iShow=!display?1:iShow;
 
- console.log(iShow2)
+
 
    circle?length=children.length+(2*parseInt(iShow)):length=children.length;
-     console.log(iShow)
+     
      const iWidth=100;
-    const element=useRef();
+   
     const parentElement=useRef();
-    // const parentElement2=useRef()
+    
     const[first,setFirst]=useState()
     const[innerWidth,setInner]=useState(window.innerWidth);
+     const[itemswidth,setwidth]=useState(0);
    
      const[itemWidth,setItem]=useState()
      const[itemHeight,setItemH]=useState()
-    //  const[itemswidth,setItems]=useState()
+    const[rootH,setH]=useState(0);
+    const[rootW,setW]=useState(0);
     const[position,setPosition]=useState(0);
     const[width,setWidth]=useState(0);
     const[position2,setPosition2]=useState(0);
-   const[sPosition,setSposition]=useState();
+  //  const[sPosition,setSposition]=useState();
    const[side,setSide]=useState(false);
-   const [clicked,setClicked]=useState(false);
-   const[smoth,setSmoth]=useState(false);
+    const [clicked,setClicked]=useState(false);
+  //  const[smoth,setSmoth]=useState(false);
     
    
 
  useEffect(()=>{
  
-  console.log(length)
+  
+  setW(parentElement.current.offsetWidth);
+  setH(parentElement.current.offsetHeight);
   if(circle){
   setPosition(-itemWidth*iShow);
  setFirst(itemWidth*iShow)
@@ -53,30 +62,31 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
      setWidth(0);
   }
  
- },[itemWidth,circle,itemswidth])
+ },[circle,itemHeight])
 
 
    function click(e){
    
     setPosition(-e.target.id);
     setWidth( parseInt(e.target.id));
-    setSmoth(true);
-   
+    // setSmoth(true);
+       smoth=true;
   
    }
     function downHandaler(e){
       client=!e.touches?display?e.nativeEvent.clientX:e.nativeEvent.clientY:display?e.touches[0].clientX:e.touches[0].clientY;
      !e.touches&&e.preventDefault();
      
-        setClicked(true);
-        
-        setPosition2(position);
-        setSposition((client)-position);
-        // console.log(client)
-        setSmoth(false);
-        
-        // console.log(sPosition);-parentElement.current.offsetLeft this is a child box left count
+         setClicked(true);
+        // clicked=true;
+         setPosition2(position);
+        //  setSposition((client)-position);
+        sPosition=client-position;
       
+        // setSmoth(false);
+        smoth=false;
+        
+       
       
     }
    
@@ -91,9 +101,9 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
             client=!e.touches?display?e.nativeEvent.clientX:e.nativeEvent.clientY:display?e.touches[0].clientX:e.touches[0].clientY;
             let fixedp=client-sPosition;
            
-             let lastP=display?itemswidth-rootW:itemHeight*length-rootH;
+            let lastP=display?(itemswidth)-rootW:itemHeight*length-rootH;
             (fixedp>0||fixedp<-(lastP))&&(fixedp=position2-fixedp<0?0:-(lastP));
-            setPosition(fixedp);
+             setPosition(fixedp);
             
         
         // this logic hel side touch decide work not work
@@ -118,17 +128,18 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
    
      
     function upHandler(){
-      console.log('dady')
+     
       clicked&&positioncheck()
     }
     function positioncheck(){
-      console.log(side)
-        setClicked(false);
-        console.log(side)
-        setSmoth(true);
+       
+        // clicked=false;
+          setClicked(false);
+        // setSmoth(true);
+        smoth=true;
         if(!side&&stricky){
           setPosition(position2);
-         console.log('tomy')
+       
         }
        
         else if(side){
@@ -151,32 +162,41 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
      
       
 
-    console.log(display)
+    
 
       useEffect(()=>{
         
-        console.log('notiiiiiiiiiiii')
-        rootW=parentElement.current.offsetWidth;
-        rootH=parentElement.current.offsetHeight;
-        media&& setItem(parseInt( parentElement.current.offsetWidth/iShow)) ;
-        media&&(itemswidth=( parentElement.current.offsetWidth/iShow)*length);
-        setItemH(parseInt( parentElement.current.offsetHeight/iShow2));
+       
+        // rootH=parentElement.current.offsetHeight;
+        // rootW=parentElement.current.offsetWidth;
+      
+          media&& setItem(parseInt( parentElement.current.offsetWidth/iShow)) ;
+          media&&setwidth( (parentElement.current.offsetWidth/iShow)*length);
+          setItemH(parseInt(parentElement.current.offsetHeight/iShow2));
          const handaleResize=()=>{
-           media&&setItem(parseInt( parentElement.current.offsetWidth/iShow));
-           rootW=parentElement.current.offsetWidth;
-           cb&&cb();
+            setW(parentElement.current.offsetWidth);
+          media&&setItem(parseInt( parentElement.current.offsetWidth/iShow));
+            media&&setwidth( (parentElement.current.offsetWidth/iShow)*length);
+           setItemH(parseInt(parentElement.current.offsetHeight/iShow2));
+            cb&&cb();
           
          }
           window.addEventListener("resize",handaleResize);
          
-         return ()=>window.removeEventListener('resize',handaleResize)
+         return ()=>{
+      
+          setItemH(0)
+         !media&&setwidth(0);
+          window.removeEventListener('resize',handaleResize)
+         }
      },[iShow,iShow2])
     
+    
 
-
-     console.log(itemswidth)
+   
    function box(value){
-    const  div=element.current;
+    
+    const  div=parentElement.current;
     let itemsWidth=0;
     const arr=[];
     let arr2=[];
@@ -186,27 +206,26 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
     (circle&&i<parseInt(iShow))?count=children[(children.length-parseInt(iShow))+i]:circle?count=children[i-parseInt(iShow)]:count=children[i];
     (circle&&i>=children.length+parseInt(iShow))&&(count=children[i-(children.length+parseInt(iShow))]);
    
-      arr.push(<div key={i} id={i} className='c'  aria-hidden={itemWidth*i!=width&&"true"} style={{width:display?itemswidth===undefined?`${iWidth/iShow}%`:media?`${itemWidth}px`:'auto':'auto',height:!display?`${itemHeight}px`:'auto', whiteSpace:'nowrap'}}  >{count}</div>);
+      arr.push(<div key={i} id={i} className='c'  aria-hidden={itemWidth*i!=width&&"true"} style={{width:display?itemswidth===undefined?`${iWidth/iShow}%`:media?`${itemWidth}px`:'auto':'auto',height:!display&&itemHeight?`${itemHeight}px`:'auto', whiteSpace:'nowrap'}}  >{count}</div>);
         i<children.length&& arr2.push( <li key={i}><button className='btn ' id={itemWidth==undefined?i:itemWidth*(i+1)} onClick={click} style={{opacity:(itemWidth*(i+1)==width)||((width==0&&i==children.length-iShow)||(width==itemWidth*(children.length+iShow)&&i==0))?'1':''}} ></button></li>);
        
-        (div)&&( itemsWidth+=div.children[i].offsetWidth);
+         (!media&&div)&&( itemsWidth+=div.children[0].children[i].offsetWidth);
       
     }
    
   
   if(value=="card"){
-    console.log(display)
-     console.log(itemsWidth);
-    //  (!media&&!itemswidth&&div)&& setItems(itemsWidth),console.log('emonnnn');
-    (!media&&div)&&(itemswidth=itemsWidth);
-    console.log('wmoooooooooooo');
+    
+   
+    (!media&&div&&!itemswidth)&&(setwidth(itemsWidth));
+   
     return arr;
   }else{
    return arr2;
   }
 }
 
-// console.log(element.current.offsetWidth)
+
   return (
 
 <div className='slider'>
@@ -216,7 +235,7 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
      setPosition(position+itemWidth);
      btCount++;
      setWidth(width-itemWidth)
-     setSmoth(true);
+    //  setSmoth(true);
      
  
    
@@ -228,7 +247,7 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
 
    <div className='slide'
      onMouseDown={downHandaler}
-     onTouchStart={downHandaler}
+       onTouchStart={downHandaler}
      onMouseMove={moveHandaler}
      onTouchMove={moveHandaler}
      onMouseUp={upHandler}
@@ -240,8 +259,9 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
 
 
       {/* width:display?itemWidth===undefined?`${(iWidth*length/iShow)}%`:`${(itemswidth}px`:'', */}
-    <div className={`slider-container ${smoth&&'smoth'}`} style={{width:display?!itemswidth?`${(iWidth*length/iShow)}%`:`${(itemswidth)}px`:'', transform: `${translate}(${ position}px)` ,display:display?'flex':'block'} } onTransitionEnd={()=>{
-       setSmoth(false) 
+    <div className={`slider-container ${smoth&&'smoth'}`} style={{width:display?!itemswidth?`${(iWidth*length/iShow)}%`:`${itemswidth}px`:'', transform: `${translate}(${ position}px)` ,display:display?'flex':'block'} } onTransitionEnd={()=>{
+      //  setSmoth(false) 
+      smoth=false;
        btCount=0;
           if((position==0|| position==-itemWidth*(children.length+iShow))&&circle){
             
@@ -254,7 +274,6 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
           //  circleItem();     
 
     }}
-    ref={element}
      >
        {box('card')} 
       
@@ -272,7 +291,7 @@ function Move({children,dots,iShow,circle,prevArrow,NextArrow,display,stricky,cb
       setWidth(width+itemWidth)
       btCount++;
     
-      setSmoth(true);
+      // setSmoth(true);
     },
 })}
 

@@ -6,7 +6,7 @@ import Move from '../../dragable/Move'
 function Categories() {
   const [value,setValue]=useState(window.screen.width<1024);
   // console.log(window.screen.width)
-  // const dis=window.screen.width<1024;
+  const dis=window.screen.width<1024;
 
   
 
@@ -17,7 +17,8 @@ function Categories() {
    cb:()=>{
     console.log(window.screen.width<1024)
     setValue(window.screen.width<1024)
-  }
+  },
+  
   }
   
   return (
